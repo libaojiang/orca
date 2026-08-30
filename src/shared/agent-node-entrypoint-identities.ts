@@ -14,6 +14,13 @@ export const EXACT_NODE_ENTRYPOINT_IDENTITIES: readonly {
     agent: 'cursor',
     processName: 'cursor-agent'
   },
+  // Why: Qwen's Windows and npm launchers both run a generic cli-entry.js under Node.
+  {
+    pattern:
+      /(?:^|\/)(?:node_modules\/@qwen-code\/qwen-code\/(?:scripts\/)?cli-entry\.js|appdata\/local\/qwen-code\/qwen-code\/lib\/cli-entry\.js)$/,
+    agent: 'qwen-code',
+    processName: 'qwen'
+  },
   // Why: Pi's npm shim launches a generic cli.js; only the exact package path is authoritative.
   {
     pattern:
