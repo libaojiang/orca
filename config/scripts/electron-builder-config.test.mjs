@@ -272,12 +272,30 @@ describe('electron-builder config', () => {
 
   it('uses AppImage and deb as local Linux targets without changing existing artifact names', () => {
     expect(electronBuilderConfig.linux.target).toEqual(['AppImage', 'deb'])
+    expect(electronBuilderConfig.toolsets).toEqual({ appimage: '1.0.3' })
     expect(electronBuilderConfig.appImage.artifactName).toBe('orca-linux.${ext}')
     expect(electronBuilderConfig.deb.artifactName).toBe('orca-ide_${version}_${arch}.${ext}')
     expect(electronBuilderConfig.rpm).toMatchObject({
       packageName: 'orca-ide',
       artifactName: 'orca-ide-${version}.${arch}.${ext}'
     })
+  })
+
+  it('validates each AppImage before electron-builder publishes it', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'orca-electron-builder-appimage-'))
+    try {
+      const appImage = join(root, 'orca-linux.AppImage')
+      await writeFile(appImage, 'not an ELF')
+
+      expect(() => electronBuilderConfig.artifactBuildCompleted({ file: appImage })).toThrow(
+        /Invalid static AppImage/
+      )
+      expect(() =>
+        electronBuilderConfig.artifactBuildCompleted({ file: join(root, 'orca-ide.deb') })
+      ).not.toThrow()
+    } finally {
+      await rm(root, { recursive: true, force: true })
+    }
   })
 
   it('uses a distinct AppImage name for Linux arm64 release uploads', () => {
