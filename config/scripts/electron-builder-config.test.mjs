@@ -287,9 +287,9 @@ describe('electron-builder config', () => {
       const appImage = join(root, 'orca-linux.AppImage')
       await writeFile(appImage, 'not an ELF')
 
-      expect(() => electronBuilderConfig.artifactBuildCompleted({ file: appImage })).toThrow(
-        /Invalid static AppImage/
-      )
+      expect(() =>
+        electronBuilderConfig.artifactBuildCompleted({ file: appImage, arch: 1 })
+      ).toThrow(/ELF header is outside/)
       expect(() =>
         electronBuilderConfig.artifactBuildCompleted({ file: join(root, 'orca-ide.deb') })
       ).not.toThrow()
