@@ -73,7 +73,7 @@ describe('headless serve shutdown PR gate', () => {
       'These guarantees do not preserve live processes. The service restart kills every terminal and agent in its cgroup'
     )
     expect(headlessLinuxProse).toContain(
-      'Proceed only when it is untruncated, has an explicit `hostScope` covering every expected execution host, has no `omittedHostIds`, and lists no terminals'
+      'A separately paired runtime is outside that boundary; local execution and SSH hosts reached through this runtime are not. An affected or unknown omission, missing scope, failed request or lost connection is `unverifiable`'
     )
     expect(headlessLinuxGuide).not.toContain('Two facts make this safe and predictable')
   })
