@@ -14,10 +14,15 @@ export const EXACT_NODE_ENTRYPOINT_IDENTITIES: readonly {
     agent: 'cursor',
     processName: 'cursor-agent'
   },
-  // Why: Qwen's Windows and npm launchers both run a generic cli-entry.js under Node.
+  // Why: Qwen's npm shim runs a generic cli-entry.js under Node.
   {
-    pattern:
-      /(?:^|\/)(?:node_modules\/@qwen-code\/qwen-code\/(?:scripts\/)?cli-entry\.js|appdata\/local\/qwen-code\/qwen-code\/lib\/cli-entry\.js)$/,
+    pattern: /(?:^|\/)node_modules\/@qwen-code\/qwen-code\/(?:scripts\/)?cli-entry\.js$/,
+    agent: 'qwen-code',
+    processName: 'qwen'
+  },
+  // Why: the standalone launcher lives under the standard per-user LocalAppData root.
+  {
+    pattern: /^[a-z]:\/users\/[^/]+\/appdata\/local\/qwen-code\/qwen-code\/lib\/cli-entry\.js$/,
     agent: 'qwen-code',
     processName: 'qwen'
   },

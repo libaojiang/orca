@@ -212,6 +212,11 @@ describe('agent process recognition', () => {
         String.raw`node.exe C:\tools\unrelated\qwen-code\qwen-code\lib\cli-entry.js`
       )
     ).toBeNull()
+    expect(
+      recognizeAgentProcessFromCommandLine(
+        String.raw`node.exe C:\tools\unrelated\AppData\Local\qwen-code\qwen-code\lib\cli-entry.js`
+      )
+    ).toBeNull()
   })
 
   it('recognizes agent CLIs launched through interpreter wrappers', () => {
